@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html lang="en" ng-app="soccerStandings">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>New York Corporate League Standings</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  	<style>
+      body {
+        background-color: #eee;
+      }
+      .top-header {
+        background-color: #218A3D;
+        color: white;
+        font-size: 30pt;
+        padding: 5px 10px;
+      }
+  	  .table>tbody>tr:hover {
+  	    background-color: #f9f9f9;
+  	  }
+      .content-column {
+        margin: 16px auto;
+        max-width: 530px;
+        min-width: 280px;
+        position: relative;
+      }
+      .table {
+        margin: 0;
+      }
+      .box {
+        background-color: white;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.24);
+        -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.24);
+        box-shadow: 0 1px 1px rgba(0,0,0,0.24);
+        margin: 0 0 24px auto;
+        overflow: hidden;
+        padding: 20px;
+      }
+      .box h2 {
+          color: #212121;
+          font-size: 24px;
+          font-weight: normal;
+          margin: 0;
+          padding: 0;
+      }
+  	</style>
+    <!-- script type="text/javascript" src="angular.min.js"></script -->
+    <!-- script type="text/javascript" src="app.js"></script -->
+  </head>
+  <body>
+	<div class="top-header">New York Corporate Soccer League</div>
+	<div class="content-column">
+  <div class="box">
+	<table class="table table-condensed">
+	<thead><th>Team</th><th>Points</th><th>GP</th><th>W</th><th>T</th><th>L</th><th>GF</th><th>GA</td></thead>
+	<tbody>
+      {% for team in teams %}
+  	    <tr>
+  	    <td>{{team.name}}</td>
+  		  <td>{{team.points}}</td>
+  		  <td>{{team.wins + team.ties + team.losses}}</td>
+  		  <td>{{team.wins}}</td>
+  		  <td>{{team.ties}}</td>
+  		  <td>{{team.losses}}</td>
+        <td>{{team.goals_for}}</td>
+        <td>{{team.goals_against}}</td>
+  	    </tr>
+        <!-- tr>
+          <td colspan=5>Foo<td>
+        </tr -->
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+  </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- script src="js/bootstrap.min.js"></script -->
+  </body>
+</html>
+{% endautoescape %}
