@@ -21,8 +21,7 @@ import os
 import urllib
 import webapp2
 
-import schedule_page
-import standings_page
+import league_website
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -47,8 +46,7 @@ def MakeDivisionJson(division):
 
 class StandingsHandler(webapp2.RequestHandler):
   def get(self):
-    divisions = standings_page.ScrapedStandings(
-        urllib.urlopen("http://corporateleague.com/soccer/corpstandings.html")).Divisions()
+    divisions = league_website.RetrieveLeagueWebsite().Standings().Divisions()
     template = JINJA_ENVIRONMENT.get_template('standings.html')
     self.response.write(template.render({"divisions": divisions}))
     
@@ -60,8 +58,7 @@ class StandingsHandler(webapp2.RequestHandler):
 
 class CalculatedStandingsHandler(webapp2.RequestHandler):
   def get(self):
-    matches = schedule_page.ScrapedSchedule(
-      urllib.urlopen('http://corporateleague.com/soccer/schedwinter.html')).MatchEntries()
+    matches = league_website.RetrieveLeagueWebsite().Matches()
     teams = collections.defaultdict(dict)
     standings = {}
     template = JINJA_ENVIRONMENT.get_template('schedule.html')
@@ -71,16 +68,15 @@ def MakeMatchJson(match):
   match_dict = {
     "time": match.time.isoformat(),
     "location": match.location,
-    "teams": match.teams,
+    "teams": [match.team_1, match.team_2],
+    "goals": [match.result_1, match.result_2]
   }
-  if match.goals:
-    match_dict["goals"] = match.goals
   return match_dict
+
 
 class ScheduleHandler(webapp2.RequestHandler):
   def get(self):
-    matches = schedule_page.ScrapedSchedule(
-      urllib.urlopen('http://corporateleague.com/soccer/schedwinter.html')).MatchEntries()
+    matches = league_website.RetrieveLeagueWebsite().Matches()
     response = {
       "matches": [MakeMatchJson(m) for m in matches]
     }
